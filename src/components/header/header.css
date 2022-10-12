@@ -1,0 +1,17 @@
+.headerWrapper{
+   background-color: rgb(176, 182, 180);
+   height: 200px;
+}
+
+.headerWrapper img {
+  height: 150px;
+  width: 150px;
+  float: left;
+  padding: 10px;
+}
+
+.headerWrapper p{
+  float: left;
+  padding: 35px;
+  font-size: 30px;
+}
