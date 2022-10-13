@@ -1,6 +1,6 @@
-import { AdminWrapper, HeadingAddUser, FormWrapper , CloseBtn } from './adminStyle';
+import { AdminWrapper, HeadingAddUser, FormWrapper, CloseBtn, SearchHeading } from './adminStyle';
 import Table from 'react-bootstrap/Table';
-import { useGetAllPostDataQuery } from '../../services/createSlice';
+import { useGetAddUserMutation, useGetAllPostDataQuery } from '../../services/createSlice';
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -16,7 +16,9 @@ import {
   // Row,
   Select,
 } from 'antd';
+import { JsonData } from '../../jsonData/cities-name-list'
 
+const { Option } = Select;
 
 const formItemLayout = {
   labelCol: {
@@ -55,51 +57,88 @@ const Admin = () => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  console.log("data", data)
+  const [addUser, addUserInfo] = useGetAddUserMutation();
+
+  const [form] = Form.useForm();
+
+  const onFinish = (value) => {
+    console.log("impoutFormValues", value);
+    form.resetFields();
+  }
+
+  // serach functionallity
+  // console.log("jsondfata",JsonData);
+
+  
+  const onChange = (value) => {
+    console.log(`selected ${value}`);
+  };
+  const onSearch = (value) => {
+    console.log('search:', value);
+  };
+
   return (
     <AdminWrapper>
       <h1>Users Details....</h1>
-      <button className='addBtn btn btn-primary' onClick={handleShow} >Add User</button>
-      <Table striped bordered hover variant="dark" className='container' >
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Age</th>
-            <th>City</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            data?.map((item, index) => (
-              <tr key={index}>
-                <td>{item._id}</td>
-                <td>{item.name}</td>
-                <td>{item.age}</td>
-                <td>{item.city}</td>
-                <td><button className='deleteBtn btn btn-danger' >DELETE</button></td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </Table>
+      <div className="container">
+        <SearchHeading>
+          <Select
+            showSearch
+            placeholder="Select a City"
+            optionFilterProp="children"
+            onChange={onChange}
+            onSearch={onSearch}
+            filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
+          >
+            {
+              JsonData?.map((item,index)=>(
+                <Option key={index} value={item.name}>{item.name}</Option>
+              ))
+            }
+          </Select>
+        </SearchHeading>
+        <button className='addBtn btn btn-primary' onClick={handleShow} >Add User</button>
+        <Table striped bordered hover variant="dark">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Age</th>
+              <th>City</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              data?.map((item, index) => (
+                <tr key={index}>
+                  <td>{item._id}</td>
+                  <td>{item.name}</td>
+                  <td>{item.age}</td>
+                  <td>{item.city}</td>
+                  <td><button className='deleteBtn btn btn-danger' >DELETE</button></td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </Table>
+      </div>
       <Modal
         show={show}
         onHide={handleClose}
         backdrop="static"
         keyboard={false}
-        style={{'borderRadius':'5px !important'}}
-       >
+        style={{ 'borderRadius': '5px !important' }}
+      >
         <HeadingAddUser>Register Here!!</HeadingAddUser>
         <Modal.Body>
           <FormWrapper>
             <Form
               className='AddUserForm'
               {...formItemLayout}
-              // form={form}
+              form={form}
               name="addUser"
-              // onFinish={onFinish}
+              onFinish={onFinish}
               initialValues={{
                 prefix: '+91',
               }}
@@ -157,8 +196,27 @@ const Admin = () => {
                   },
                 ]}
               >
-                <Input  placeholder="Enter City" />
+                <Input placeholder="Enter City" />
               </Form.Item>
+
+
+              <Form.Item
+                name="gender"
+                label="Gender"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please select gender!',
+                  },
+                ]}
+              >
+                <Select placeholder="select your gender">
+                  <Option value="male">Male</Option>
+                  <Option value="female">Female</Option>
+                  <Option value="other">Other</Option>
+                </Select>
+              </Form.Item>
+
               <Form.Item
                 name="agreement"
                 valuePropName="checked"

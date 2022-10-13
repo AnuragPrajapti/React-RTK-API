@@ -1,7 +1,8 @@
 import styled from "styled-components";
 
 export const AdminWrapper = styled.div`
- background-color: antiquewhite;
+background-color: rgb(0 0 0 / 8%);
+ height : 100vh;
   h1{
      text-align : center;
    }
@@ -15,7 +16,7 @@ export const AdminWrapper = styled.div`
     float : right;
     box-shadow: 0 0 1px 1px;
     border-radius: 0px !important;
-    margin : 0 27px 0px 0px;
+    margin : 0 0px 5px 0px;
  }
 `;
 
@@ -40,4 +41,8 @@ export const CloseBtn = styled.button`
  width: 100px;
  box-shadow: 0 0 1px 1px;
  border-radius: 0px !important;
+`;
+
+export const SearchHeading = styled.div`
+  color : red;
 `;

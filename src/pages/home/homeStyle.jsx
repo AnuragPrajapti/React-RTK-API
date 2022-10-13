@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+export const HomeWrapper = styled.div`
+   // color : red;
+`;
+
 export const HeadingHomePage = styled.p`
  font-weight: 500;
  font-size: 32px;
@@ -8,7 +12,7 @@ export const HeadingHomePage = styled.p`
  border-bottom: 2px solid;
  border-bottom-color: #97b8d5;
  font-family: initial;
-`;
+`; 
 
 export const ImageWrapper = styled.div`
 display: inline;

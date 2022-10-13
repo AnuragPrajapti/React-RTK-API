@@ -30,4 +30,5 @@ font-size: 32px;
 text-align: center;
 border-bottom: 2px solid #b6d2ea;
 font-family: none;
+letter-spacing: .3em;
 `;
