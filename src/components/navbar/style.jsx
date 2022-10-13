@@ -1,17 +1,31 @@
 import styled from 'styled-components'
 
 export const NavbarWrapper = styled.div`
-background-color: black;
-height: 50px;
-margin: -16px 0px 0px 0px;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ background-color:  rgb(122 144 137);
+ padding-top : 20px;
+ .navbarLinkActive{
+   border-bottom: 3px solid red !important;
+   transition: border-bottom .5s ease-in-out !important;
+ }
+ linkTag :hover {
+   transform: translateY(-2px);
+ }
+
 `;
 
 export const ListTag = styled.li`
  display: inline;
  margin: 50px;
  .linkTag {
-  color: aliceblue;
-}
+   font-family: 'Roboto', sans-serif;
+   letter-spacing: .3em;
+   text-indent: .3em;
+   color: #181818;
+   border-bottom: 3px solid transparent;
+ }
 `;
 
 

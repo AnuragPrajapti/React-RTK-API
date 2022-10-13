@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { HeadingHomePage , ImageWrapper } from './homeStyle';
+import { HeadingHomePage , ImageWrapper , HomeWrapper } from './homeStyle';
 import axios from 'axios';
 
 const Home = () => {
@@ -16,6 +16,7 @@ const Home = () => {
 
   return (
     <div className='container'>
+      <HomeWrapper>
        <HeadingHomePage>List of Image Api!!!</HeadingHomePage>
        {
           imageApiData?.map((item,index)=> <div key={index}>
@@ -24,7 +25,8 @@ const Home = () => {
                      <p>{item.name}</p>
                      </ImageWrapper>
           </div> )
-       }            
+       }        
+       </HomeWrapper>    
     </div>
   )
 }
