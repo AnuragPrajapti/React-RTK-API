@@ -1,12 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const Token = JSON.parse(localStorage.getItem("authToken"));
-console.log("TokenSlice",Token);
+// console.log("TokenSlice",Token);
 export const getAllApi = createApi({
   reducerPath: "getAllApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "https://adminaman.herokuapp.com/",
   }),
+  
   endpoints: (build) => ({
     getRegisterUser: build.mutation({
       query: (registerUser) => ({

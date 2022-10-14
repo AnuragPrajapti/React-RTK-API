@@ -69,7 +69,7 @@ const Admin = () => {
   // serach functionallity
   // console.log("jsondfata",JsonData);
 
-  
+
   const onChange = (value) => {
     console.log(`selected ${value}`);
   };
@@ -87,11 +87,12 @@ const Admin = () => {
             placeholder="Select a City"
             optionFilterProp="children"
             onChange={onChange}
+            style={{ display : "flex" , width : '300px' }}
             onSearch={onSearch}
             filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
           >
             {
-              JsonData?.map((item,index)=>(
+              JsonData?.map((item, index) => (
                 <Option key={index} value={item.name}>{item.name}</Option>
               ))
             }
@@ -186,7 +187,7 @@ const Admin = () => {
               >
                 <Input type='number' placeholder='Enter Age' />
               </Form.Item>
-              <Form.Item
+              {/* <Form.Item
                 name="city"
                 label="City"
                 rules={[
@@ -197,25 +198,38 @@ const Admin = () => {
                 ]}
               >
                 <Input placeholder="Enter City" />
-              </Form.Item>
+              </Form.Item> */}
+
 
 
               <Form.Item
-                name="gender"
-                label="Gender"
+                name="city"
+                label="City"
                 rules={[
                   {
                     required: true,
-                    message: 'Please select gender!',
+                    message: 'Please input City',
                   },
                 ]}
               >
-                <Select placeholder="select your gender">
-                  <Option value="male">Male</Option>
-                  <Option value="female">Female</Option>
-                  <Option value="other">Other</Option>
-                </Select>
+              <Select
+                showSearch
+                placeholder="Select a City"
+                optionFilterProp="children"
+                onChange={onChange}
+                onSearch={onSearch}
+                style={{ display : "flex" }}
+                filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
+              >
+                {
+                  JsonData?.map((item, index) => (
+                    <Option key={index} value={item.name}>{item.name}</Option>
+                  ))
+                }
+              </Select>
               </Form.Item>
+
+
 
               <Form.Item
                 name="agreement"
