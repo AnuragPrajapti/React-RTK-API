@@ -16,14 +16,16 @@ const Login = () => {
     form.resetFields()
   };
 
-   console.log("tokenand dtaa",userLoginInfo);
+  console.log("token and dtaa", userLoginInfo);
+
   useEffect(() => {
     if (userLoginInfo?.data?.token) {
-      localStorage.setItem('authToken',JSON.stringify(userLoginInfo?.data?.token));
+      localStorage.setItem('authToken', JSON.stringify(userLoginInfo?.data?.token));
+      console.log("loginToken",userLoginInfo?.data?.token)
     }
-  //   else if(userLoginInfo?.data){
-  //     localStorage.setItem('loginUserData', JSON.stringify(userLoginInfo?.data?.id));
-  //   }
+    //   else if(userLoginInfo?.data){
+    //     localStorage.setItem('loginUserData', JSON.stringify(userLoginInfo?.data?.id));
+    //   }
   }, [userLoginInfo])
 
   // Modal Popup  And Forget Password
@@ -43,15 +45,15 @@ const Login = () => {
     })
   }
 
-   const handleChangePasss = ()=>{
-      const id = userLoginInfo?.data;
-      console.log("hjzcxdfjd",id)
-   }
+  const handleChangePasss = () => {
+    const id = userLoginInfo?.data;
+    console.log("hjzcxdfjd", id)
+  }
 
 
   return (
     <LoginWrapper>
-       <HeadingLogin>Login Here!!</HeadingLogin>
+      <HeadingLogin>Login Here!!</HeadingLogin>
       <Form
         name="normal_login"
         className="login-form"
@@ -96,7 +98,7 @@ const Login = () => {
             Forgot Password
           </NavLink>
           <br />
-          <p  onClick={handleShow}>
+          <p onClick={handleShow}>
             <NavLink className="login-form-forgot" onClick={handleChangePasss} >
               Change Password
             </NavLink>

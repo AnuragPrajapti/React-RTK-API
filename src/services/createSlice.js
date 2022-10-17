@@ -1,13 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const Token = JSON.parse(localStorage.getItem("authToken"));
-// console.log("TokenSlice",Token);
+console.log("TokenSlice", Token);
+
 export const getAllApi = createApi({
   reducerPath: "getAllApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "https://adminaman.herokuapp.com/",
   }),
-  
+
   endpoints: (build) => ({
     getRegisterUser: build.mutation({
       query: (registerUser) => ({
@@ -20,29 +21,34 @@ export const getAllApi = createApi({
       }),
     }),
     getLoginUser: build.mutation({
-      query: (loginUser) => ({
-        url: `login`,
-        method: "POST",
-        body: loginUser,
-        headers: {
-          "Content-type": "application/json",
-        },
-      }),
+      query: (loginUser) => {
+        console.log("LoginUserDataRTK", loginUser);
+        return {
+          url: `login`,
+          method: "POST",
+          body: loginUser,
+          headers: {
+            "Content-type": "application/json",
+          },
+        };
+      },
     }),
     getAllPostData: build.query({
-      query: () => ({
-        url: `get`,
-        method: "GET",
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${Token}`,
-        },
-      }),
+      query: () => {
+        return {
+          url: `all`,
+          method: "GET",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${Token}`,
+          },
+        };
+      },
     }),
     getForgetPassword: build.mutation({
       query: (forgetPass) => {
-        debugger
-        console.log("Slice Forget",forgetPass);
+        debugger;
+        console.log("Slice Forget", forgetPass);
         return {
           url: `forget`,
           method: `POST`,
@@ -65,7 +71,7 @@ export const getAllApi = createApi({
         },
       }),
     }),
-    getChangePassword : build.mutation({
+    getChangePassword: build.mutation({
       query: (changePass) => ({
         url: `update`,
         method: "POST",
@@ -74,6 +80,19 @@ export const getAllApi = createApi({
           "Content-type": "application/json",
         },
       }),
+    }),
+    getDeleteUser: build.mutation({
+      query: (id) => {
+        console.log("DeleteSliceId",id)
+        return {
+          url: `delete/${id}`,
+          method: "DELETE",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${Token}`,
+          },
+        };
+      },
     }),
   }),
 });
@@ -84,5 +103,6 @@ export const {
   useGetAllPostDataQuery,
   useGetAddUserMutation,
   useGetForgetPasswordMutation,
-  useGetChangePasswordMutation
+  useGetChangePasswordMutation,
+  useGetDeleteUserMutation,
 } = getAllApi;
