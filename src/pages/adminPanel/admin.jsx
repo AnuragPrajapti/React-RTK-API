@@ -1,25 +1,14 @@
 import { AdminWrapper, HeadingAddUser, FormWrapper, CloseBtn, SearchHeading } from './adminStyle';
 import Table from 'react-bootstrap/Table';
-import { useGetAddUserMutation, useGetAllPostDataQuery } from '../../services/createSlice';
+import { useGetAddUserMutation, useGetAllPostDataQuery, useGetDeleteUserMutation } from '../../services/createSlice';
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import {
-  // AutoComplete,
-  // Button,
-  // Cascader,
-  Checkbox,
-  // Col,
-  Form,
-  Input,
-  // InputNumber,
-  // Row,
-  Select,
-} from 'antd';
+import {Checkbox, Form, Input, Select,} from 'antd';
 import { JsonData } from '../../jsonData/cities-name-list'
+import { AiFillDelete } from "react-icons/ai";
 
 const { Option } = Select;
-
 const formItemLayout = {
   labelCol: {
     xs: {
@@ -51,31 +40,34 @@ const tailFormItemLayout = {
   },
 };
 
-
 const Admin = () => {
   const { data, isLoading, error } = useGetAllPostDataQuery();
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [addUser, addUserInfo] = useGetAddUserMutation();
-
+  const [ deleteUser , deleteUserInfo ] = useGetDeleteUserMutation();
   const [form] = Form.useForm();
 
   const onFinish = (value) => {
     console.log("impoutFormValues", value);
+    addUser(value)
     form.resetFields();
+    window.location('/admin')
   }
 
-  // serach functionallity
-  // console.log("jsondfata",JsonData);
+  const handleDelete = (id) => {
+    deleteUser(id)
+    console.log("delete",id)
+  }
 
-  
   const onChange = (value) => {
     console.log(`selected ${value}`);
   };
   const onSearch = (value) => {
     console.log('search:', value);
   };
+  
 
   return (
     <AdminWrapper>
@@ -87,11 +79,12 @@ const Admin = () => {
             placeholder="Select a City"
             optionFilterProp="children"
             onChange={onChange}
+            style={{ display : "flex" , width : '300px' }}
             onSearch={onSearch}
             filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
           >
             {
-              JsonData?.map((item,index)=>(
+              JsonData?.map((item, index) => (
                 <Option key={index} value={item.name}>{item.name}</Option>
               ))
             }
@@ -112,11 +105,18 @@ const Admin = () => {
             {
               data?.map((item, index) => (
                 <tr key={index}>
-                  <td>{item._id}</td>
+                  <td>{index}</td>
                   <td>{item.name}</td>
                   <td>{item.age}</td>
                   <td>{item.city}</td>
-                  <td><button className='deleteBtn btn btn-danger' >DELETE</button></td>
+                  <td 
+                  style={{ fontSize : '28px' , color : 'red' }}
+                  onClick={()=> handleDelete(item._id)}
+                    >
+                    {/* <button className='deleteBtn btn btn-danger' > */}
+                    <AiFillDelete />
+                    {/* </button> */}
+                    </td>
                 </tr>
               ))
             }
@@ -130,7 +130,7 @@ const Admin = () => {
         keyboard={false}
         style={{ 'borderRadius': '5px !important' }}
       >
-        <HeadingAddUser>Register Here!!</HeadingAddUser>
+        <HeadingAddUser>AddUser Here!!</HeadingAddUser>
         <Modal.Body>
           <FormWrapper>
             <Form
@@ -186,7 +186,7 @@ const Admin = () => {
               >
                 <Input type='number' placeholder='Enter Age' />
               </Form.Item>
-              <Form.Item
+              {/* <Form.Item
                 name="city"
                 label="City"
                 rules={[
@@ -197,25 +197,38 @@ const Admin = () => {
                 ]}
               >
                 <Input placeholder="Enter City" />
-              </Form.Item>
+              </Form.Item> */}
+
 
 
               <Form.Item
-                name="gender"
-                label="Gender"
+                name="city"
+                label="City"
                 rules={[
                   {
                     required: true,
-                    message: 'Please select gender!',
+                    message: 'Please input City',
                   },
                 ]}
               >
-                <Select placeholder="select your gender">
-                  <Option value="male">Male</Option>
-                  <Option value="female">Female</Option>
-                  <Option value="other">Other</Option>
-                </Select>
+              <Select
+                showSearch
+                placeholder="Select a City"
+                optionFilterProp="children"
+                onChange={onChange}
+                onSearch={onSearch}
+                style={{ display : "flex" }}
+                filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
+              >
+                {
+                  JsonData?.map((item, index) => (
+                    <Option key={index} value={item.name}>{item.name}</Option>
+                  ))
+                }
+              </Select>
               </Form.Item>
+
+
 
               <Form.Item
                 name="agreement"

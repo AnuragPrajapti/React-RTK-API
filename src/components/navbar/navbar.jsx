@@ -8,25 +8,35 @@ const Navbar = () => {
     <NavbarWrapper>
       <ul>
         <ListTag>
-          <Link activeClassName="navbar__link--active" className='linkTag' to='/home'>
+          <Link className='linkTag' to='/home'>
             HomePage
           </Link>
         </ListTag>
         <ListTag>
-          <Link activeClassName="navbar__link--active" className='linkTag' to='/' >
+          <Link className='linkTag' to='/' >
             Login
           </Link>
         </ListTag>
         <ListTag>
-          <Link activeClassName="navbarLinkActive" className='linkTag' to='/register' >
+          <Link className='linkTag' to='/register' >
             Register
           </Link>
-          </ListTag>
+        </ListTag>
         <ListTag>
-          <Link activeClassName="navbar__link--active" className='linkTag' to='/admin' >
+          <Link className='linkTag' to='/admin' >
             Admin
           </Link>
-          </ListTag>
+        </ListTag>
+        <ListTag>
+          <Link className='linkTag' to='/addPost' >
+            AddPost
+          </Link>
+        </ListTag>
+        <ListTag>
+          <Link className='linkTag' to='/clipboard' >
+            ClipBord
+          </Link>
+        </ListTag>
       </ul>
     </NavbarWrapper>
   )

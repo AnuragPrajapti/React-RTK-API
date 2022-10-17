@@ -6,13 +6,13 @@ export const NavbarWrapper = styled.div`
  align-items: center;
  background-color:  rgb(122 144 137);
  padding-top : 20px;
- .navbarLinkActive{
-   border-bottom: 3px solid red !important;
-   transition: border-bottom .5s ease-in-out !important;
- }
- linkTag :hover {
-   transform: translateY(-2px);
- }
+//  .navbarLinkActive{
+//    border-bottom: 3px solid red !important;
+//    transition: border-bottom .5s ease-in-out !important;
+//  }
+//  linkTag :hover {
+//    transform: translateY(-2px);
+//  }
 
 `;
 
