@@ -18,6 +18,9 @@ background-color: rgb(0 0 0 / 8%);
     border-radius: 0px !important;
     margin : 0 0px 5px 0px;
  }
+ .ant-select-dropdown{
+  z-index: 9999999999999999 !importent;
+ }
 `;
 
 export const HeadingAddUser = styled.p`
@@ -44,5 +47,5 @@ export const CloseBtn = styled.button`
 `;
 
 export const SearchHeading = styled.div`
-  color : red;
+   
 `;

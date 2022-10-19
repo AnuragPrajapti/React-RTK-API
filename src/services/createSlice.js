@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const Token = JSON.parse(localStorage.getItem("authToken"));
-console.log("TokenSlice", Token);
+// console.log("TokenSlice", Token);
 
 export const getAllApi = createApi({
   reducerPath: "getAllApi",
@@ -9,7 +9,7 @@ export const getAllApi = createApi({
     baseUrl: "https://adminaman.herokuapp.com/",
   }),
 
-  endpoints: (build) => ({
+  endpoints : (build) => ({
     getRegisterUser: build.mutation({
       query: (registerUser) => ({
         url: `register`,
@@ -82,7 +82,7 @@ export const getAllApi = createApi({
       }),
     }),
     getDeleteUser: build.mutation({
-      query: ([...id]) => {
+      query: (id) => {
         console.log("DeleteSliceId",id)
         return {
           url: `delete/${id}`,
@@ -95,7 +95,7 @@ export const getAllApi = createApi({
       },
     }),
     getEditUser: build.mutation({
-      query: ([...id]) => {
+      query: (id) => {
         console.log("DeleteSliceId",id)
         return {
           url: `get/${id}`,

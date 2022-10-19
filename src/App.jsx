@@ -14,12 +14,12 @@ function App() {
     <>
        <IndexCmp />
        <Routes>
-         <Route path="/" element={<Login />} />
          <Route path="/home" element={<Home /> } />
          <Route path="/register" element={<Register />} />
          <Route path="/admin" element={<Admin />} />
          <Route path="/addPost" element={<AddPost />} />
          <Route path="/clipboard" element={<Clipboard />} />
+         <Route path="/" element={<Login />} />
        </Routes>
     </>
   );
