@@ -6,7 +6,7 @@ import { NavbarWrapper, ListTag } from './style';
 const Navbar = () => {
   return (
     <NavbarWrapper>
-      <ul>
+      {/* <ul> */}
         <ListTag>
           <Link className='linkTag' to='/home'>
             HomePage
@@ -37,7 +37,7 @@ const Navbar = () => {
             ClipBord
           </Link>
         </ListTag>
-      </ul>
+      {/* </ul> */}
     </NavbarWrapper>
   )
 }

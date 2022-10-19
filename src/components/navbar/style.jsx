@@ -5,7 +5,6 @@ export const NavbarWrapper = styled.div`
  justify-content: center;
  align-items: center;
  background-color:  rgb(122 144 137);
- padding-top : 20px;
 //  .navbarLinkActive{
 //    border-bottom: 3px solid red !important;
 //    transition: border-bottom .5s ease-in-out !important;
@@ -18,7 +17,7 @@ export const NavbarWrapper = styled.div`
 
 export const ListTag = styled.li`
  display: inline;
- margin: 50px;
+ margin: 20px 50px 20px 50px;
  .linkTag {
    font-family: 'Roboto', sans-serif;
    letter-spacing: .3em;

@@ -1,12 +1,16 @@
 import { AdminWrapper, HeadingAddUser, FormWrapper, CloseBtn, SearchHeading } from './adminStyle';
 import Table from 'react-bootstrap/Table';
-import { useGetAddUserMutation, useGetAllPostDataQuery, useGetDeleteUserMutation } from '../../services/createSlice';
-import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
+import {
+  useGetAddUserMutation,
+  useGetAllPostDataQuery,
+  useGetDeleteUserMutation,
+  useGetEditUserMutation
+} from '../../services/createSlice';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import {Checkbox, Form, Input, Select,} from 'antd';
+import { Checkbox, Form, Input, Select, } from 'antd';
 import { JsonData } from '../../jsonData/cities-name-list'
-import { AiFillDelete } from "react-icons/ai";
+import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 
 const { Option } = Select;
 const formItemLayout = {
@@ -27,6 +31,7 @@ const formItemLayout = {
     },
   },
 };
+
 const tailFormItemLayout = {
   wrapperCol: {
     xs: {
@@ -40,34 +45,37 @@ const tailFormItemLayout = {
   },
 };
 
-const Admin = () => {
+const Admin = ({ itemsPerPage }) => {
   const { data, isLoading, error } = useGetAllPostDataQuery();
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [addUser, addUserInfo] = useGetAddUserMutation();
-  const [ deleteUser , deleteUserInfo ] = useGetDeleteUserMutation();
+  const [deleteUser, deleteUserInfo] = useGetDeleteUserMutation();
+  const [editUser, editUserInfo] = useGetEditUserMutation();
   const [form] = Form.useForm();
 
   const onFinish = (value) => {
-    console.log("impoutFormValues", value);
     addUser(value)
     form.resetFields();
-    window.location('/admin')
   }
 
-  const handleDelete = (id) => {
+  const handleDelete = ([...id]) => {
     deleteUser(id)
-    console.log("delete",id)
+    console.log("delete", id)
   }
 
-  const onChange = (value) => {
-    console.log(`selected ${value}`);
-  };
-  const onSearch = (value) => {
-    console.log('search:', value);
-  };
-  
+  const handleEdit = (...id) => {
+    console.log("editId", id);
+    editUser(id)
+  }
+
+  useEffect(() => {
+    if (editUserInfo?.data?._id) {
+      const editData = editUserInfo?.data;
+
+    }
+  }, [editUserInfo])
 
   return (
     <AdminWrapper>
@@ -78,9 +86,9 @@ const Admin = () => {
             showSearch
             placeholder="Select a City"
             optionFilterProp="children"
-            onChange={onChange}
-            style={{ display : "flex" , width : '300px' }}
-            onSearch={onSearch}
+            // onChange={onChange}
+            style={{ display: "flex", width: '300px' }}
+            // onSearch={onSearch}
             filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
           >
             {
@@ -98,7 +106,10 @@ const Admin = () => {
               <th>Name</th>
               <th>Age</th>
               <th>City</th>
+              <th>Salary</th>
+              <th>Date</th>
               <th>Delete</th>
+              <th>Edit User</th>
             </tr>
           </thead>
           <tbody>
@@ -109,14 +120,18 @@ const Admin = () => {
                   <td>{item.name}</td>
                   <td>{item.age}</td>
                   <td>{item.city}</td>
-                  <td 
-                  style={{ fontSize : '28px' , color : 'red' }}
-                  onClick={()=> handleDelete(item._id)}
-                    >
-                    {/* <button className='deleteBtn btn btn-danger' > */}
+                  <td>{item.salary}</td>
+                  <td>{item.date}</td>
+                  <td
+                    style={{ fontSize: '28px', color: 'red' }}
+                    onClick={() => { handleDelete([item._id]) }}
+                  >
                     <AiFillDelete />
-                    {/* </button> */}
-                    </td>
+                  </td>
+                  <td style={{ fontSize: '28px', color: 'red' }}
+                    onClick={() => { handleEdit([item._id]) }}>
+                    <AiFillEdit onClick={handleShow} />
+                  </td>
                 </tr>
               ))
             }
@@ -147,7 +162,6 @@ const Admin = () => {
               <Form.Item
                 name="name"
                 label="Enter Name"
-                // tooltip="What do you want others to call you?"
                 rules={[
                   {
                     required: true,
@@ -161,7 +175,6 @@ const Admin = () => {
               <Form.Item
                 name="age"
                 label="Enter Age"
-                // tooltip="What do you want others to call you?"
                 rules={[
                   {
                     required: true,
@@ -175,7 +188,6 @@ const Admin = () => {
               <Form.Item
                 name="salary"
                 label="Enter Salary"
-                // tooltip="What do you want others to call you?"
                 rules={[
                   {
                     required: true,
@@ -184,22 +196,8 @@ const Admin = () => {
                   },
                 ]}
               >
-                <Input type='number' placeholder='Enter Age' />
+                <Input type='number' placeholder='Enter Salary' />
               </Form.Item>
-              {/* <Form.Item
-                name="city"
-                label="City"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input City',
-                  },
-                ]}
-              >
-                <Input placeholder="Enter City" />
-              </Form.Item> */}
-
-
 
               <Form.Item
                 name="city"
@@ -211,25 +209,20 @@ const Admin = () => {
                   },
                 ]}
               >
-              <Select
-                showSearch
-                placeholder="Select a City"
-                optionFilterProp="children"
-                onChange={onChange}
-                onSearch={onSearch}
-                style={{ display : "flex" }}
-                filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
-              >
-                {
-                  JsonData?.map((item, index) => (
-                    <Option key={index} value={item.name}>{item.name}</Option>
-                  ))
-                }
-              </Select>
+                <Select
+                  showSearch
+                  placeholder="Select a City"
+                  optionFilterProp="children"
+                  style={{ display: "flex" }}
+                  filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
+                >
+                  {
+                    JsonData?.map((item, index) => (
+                      <Option key={index} value={item.name}>{item.name}</Option>
+                    ))
+                  }
+                </Select>
               </Form.Item>
-
-
-
               <Form.Item
                 name="agreement"
                 valuePropName="checked"
@@ -246,9 +239,13 @@ const Admin = () => {
                 </Checkbox>
               </Form.Item>
               <Form.Item {...tailFormItemLayout}>
-                <button id="addUserbtn" className='btn btn-primary' >
-                  AddUser
-                </button>
+                {
+                  editUserInfo?.data?._id ? <button id="addUserbtn" className='btn btn-primary' >
+                    UpdateUser
+                  </button> : <button id="addUserbtn" className='btn btn-primary' >
+                    AddUser
+                  </button>
+                }
               </Form.Item>
             </Form>
           </FormWrapper>
