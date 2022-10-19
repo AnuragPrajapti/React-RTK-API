@@ -31,7 +31,7 @@ export const getAllApi = createApi({
             "Content-type": "application/json",
           },
         };
-      },
+      }, 
     }),
     getAllPostData: build.query({
       query: () => {
@@ -82,11 +82,24 @@ export const getAllApi = createApi({
       }),
     }),
     getDeleteUser: build.mutation({
-      query: (id) => {
+      query: ([...id]) => {
         console.log("DeleteSliceId",id)
         return {
           url: `delete/${id}`,
           method: "DELETE",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${Token}`,
+          },
+        };
+      },
+    }),
+    getEditUser: build.mutation({
+      query: ([...id]) => {
+        console.log("DeleteSliceId",id)
+        return {
+          url: `get/${id}`,
+          method: "GET",
           headers: {
             "Content-type": "application/json",
             Authorization: `Bearer ${Token}`,
@@ -105,4 +118,5 @@ export const {
   useGetForgetPasswordMutation,
   useGetChangePasswordMutation,
   useGetDeleteUserMutation,
+  useGetEditUserMutation
 } = getAllApi;

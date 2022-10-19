@@ -1,13 +1,27 @@
 import { AdminWrapper, HeadingAddUser, FormWrapper, CloseBtn, SearchHeading } from './adminStyle';
 import Table from 'react-bootstrap/Table';
-import { useGetAddUserMutation, useGetAllPostDataQuery, useGetDeleteUserMutation } from '../../services/createSlice';
-import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
+import { useGetAddUserMutation, useGetAllPostDataQuery, useGetDeleteUserMutation, useGetEditUserMutation } from '../../services/createSlice';
+import React, { useState, useEffect } from 'react';
+// import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import {Checkbox, Form, Input, Select,} from 'antd';
+import { Checkbox, Form, Input, Select, } from 'antd';
 import { JsonData } from '../../jsonData/cities-name-list'
-import { AiFillDelete } from "react-icons/ai";
+import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import ReactPaginate from 'react-paginate';
 
+const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+function Items({ currentItems }) {
+  return (
+    <>
+      {currentItems &&
+        currentItems.map((item) => (
+          <div>
+            <h3>Item #{item}</h3>
+          </div>
+        ))}
+    </>
+  );
+}
 const { Option } = Select;
 const formItemLayout = {
   labelCol: {
@@ -27,6 +41,7 @@ const formItemLayout = {
     },
   },
 };
+
 const tailFormItemLayout = {
   wrapperCol: {
     xs: {
@@ -40,34 +55,69 @@ const tailFormItemLayout = {
   },
 };
 
-const Admin = () => {
+const Admin = ({ itemsPerPage }) => {
   const { data, isLoading, error } = useGetAllPostDataQuery();
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [addUser, addUserInfo] = useGetAddUserMutation();
-  const [ deleteUser , deleteUserInfo ] = useGetDeleteUserMutation();
+  const [deleteUser, deleteUserInfo] = useGetDeleteUserMutation();
+  const [editUser, editUserInfo] = useGetEditUserMutation();
   const [form] = Form.useForm();
 
   const onFinish = (value) => {
-    console.log("impoutFormValues", value);
-    addUser(value)
+    // console.log("impoutFormValues", value);
+    const formData = new FormData();
+    formData.append("name",value.name);
+    // formData.append("file", value.image);
+    // formData.append("age", value.age);
+    // formData.append("city", value.city);
+    // formData.append("image", value.image);
+    // formData.append("salary", value.salary);
+    console.log("Formdata", formData);
+    // addUser(value)
     form.resetFields();
-    window.location('/admin')
   }
 
-  const handleDelete = (id) => {
+  const handleDelete = ([...id]) => {
     deleteUser(id)
-    console.log("delete",id)
+    console.log("delete", id)
   }
 
-  const onChange = (value) => {
-    console.log(`selected ${value}`);
+  const handleEdit = (...id) => {
+    console.log("editId", id);
+    editUser(id)
+  }
+
+  // console.log(5555, editUserInfo)
+  // const onChange = (value) => {
+  //   console.log(`selected ${value}`);
+  // };
+  // const onSearch = (value) => {
+  //   console.log('search:', value);
+  // };
+
+  // Pagination Start
+  const [currentItems, setCurrentItems] = useState(null);
+  const [pageCount, setPageCount] = useState(0);
+  const [itemOffset, setItemOffset] = useState(0);
+  useEffect(() => {
+    // Fetch items from another resources.
+    const endOffset = itemOffset + itemsPerPage;
+    console.log(`Loading items from ${itemOffset} to ${endOffset}`);
+    setCurrentItems(items.slice(itemOffset, endOffset));
+    setPageCount(Math.ceil(items.length / itemsPerPage));
+  }, [itemOffset, itemsPerPage]);
+
+  // Invoke when user click to request another page.
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * itemsPerPage) % items.length;
+    console.log(
+      `User requested page number ${event.selected}, which is offset ${newOffset}`
+    );
+    setItemOffset(newOffset);
   };
-  const onSearch = (value) => {
-    console.log('search:', value);
-  };
-  
+  //Pagination End
 
   return (
     <AdminWrapper>
@@ -78,9 +128,9 @@ const Admin = () => {
             showSearch
             placeholder="Select a City"
             optionFilterProp="children"
-            onChange={onChange}
-            style={{ display : "flex" , width : '300px' }}
-            onSearch={onSearch}
+            // onChange={onChange}
+            style={{ display: "flex", width: '300px' }}
+            // onSearch={onSearch}
             filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
           >
             {
@@ -98,7 +148,9 @@ const Admin = () => {
               <th>Name</th>
               <th>Age</th>
               <th>City</th>
+              <th>Salary</th>
               <th>Delete</th>
+              <th>Edit User</th>
             </tr>
           </thead>
           <tbody>
@@ -109,17 +161,32 @@ const Admin = () => {
                   <td>{item.name}</td>
                   <td>{item.age}</td>
                   <td>{item.city}</td>
-                  <td 
-                  style={{ fontSize : '28px' , color : 'red' }}
-                  onClick={()=> handleDelete(item._id)}
-                    >
+                  <td>{item.salary}</td>
+                  <td
+                    style={{ fontSize: '28px', color: 'red' }}
+                    onClick={() => { handleDelete([item._id]) }}
+                  >
                     {/* <button className='deleteBtn btn btn-danger' > */}
                     <AiFillDelete />
                     {/* </button> */}
-                    </td>
+                  </td>
+                  <td style={{ fontSize: '28px', color: 'red' }}
+                    onClick={() => { handleEdit([item._id]) }}>
+                    <AiFillEdit />
+                  </td>
                 </tr>
               ))
             }
+            <Items data={data} />
+            <ReactPaginate
+              breakLabel="..."
+              nextLabel="next >"
+              onPageChange={handlePageClick}
+              pageRangeDisplayed={5}
+              pageCount={pageCount}
+              previousLabel="< previous"
+              renderOnZeroPageCount={null}
+            />
           </tbody>
         </Table>
       </div>
@@ -211,23 +278,35 @@ const Admin = () => {
                   },
                 ]}
               >
-              <Select
-                showSearch
-                placeholder="Select a City"
-                optionFilterProp="children"
-                onChange={onChange}
-                onSearch={onSearch}
-                style={{ display : "flex" }}
-                filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
-              >
-                {
-                  JsonData?.map((item, index) => (
-                    <Option key={index} value={item.name}>{item.name}</Option>
-                  ))
-                }
-              </Select>
+                <Select
+                  showSearch
+                  placeholder="Select a City"
+                  optionFilterProp="children"
+                  // onChange={onChange}
+                  // onSearch={onSearch}
+                  style={{ display: "flex" }}
+                  filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
+                >
+                  {
+                    JsonData?.map((item, index) => (
+                      <Option key={index} value={item.name}>{item.name}</Option>
+                    ))
+                  }
+                </Select>
               </Form.Item>
 
+              <Form.Item
+                name="image"
+                label="Image"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input Image',
+                  },
+                ]}
+              >
+                <Input type='file' />
+              </Form.Item>
 
 
               <Form.Item
