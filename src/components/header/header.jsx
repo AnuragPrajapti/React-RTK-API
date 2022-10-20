@@ -5,7 +5,7 @@ const Header = () => {
   return (
     <div className="headerWrapper">
         <img src={headerImage} alt="img"/>
-        <p>IMPROVE YOUR SKILLS...</p>
+        <p><b>USER MANAGEMENT SYSTEM...</b></p>
     </div>
   )
 }

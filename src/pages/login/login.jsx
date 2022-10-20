@@ -1,6 +1,6 @@
 import { LockOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input } from 'antd';
-import { LoginWrapper , HeadingLogin } from './loginStyle';
+import { LoginWrapper , HeadingLogin , Container } from './loginStyle';
 import { NavLink } from 'react-router-dom';
 import { useGetForgetPasswordMutation, useGetLoginUserMutation } from '../../services/createSlice';
 import { useEffect, useState } from 'react';
@@ -52,6 +52,7 @@ const Login = () => {
 
 
   return (
+    <Container>
     <LoginWrapper>
       <HeadingLogin>Login Here!!</HeadingLogin>
       <Form
@@ -136,6 +137,7 @@ const Login = () => {
         </Modal.Body>
       </Modal>
     </LoginWrapper>
+    </Container>
   )
 }
 
