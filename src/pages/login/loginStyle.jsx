@@ -1,12 +1,23 @@
 import styled from 'styled-components';
+import BackgrounImage from '../../images/loginForm/loginbackgroundImage.jpg'
+
+
+export const Container = styled.div`
+ background-image : url(${BackgrounImage});
+ height: 110vh;
+ width : 100%;
+ background-size:cover;
+ background-repeat: no-repeat;
+ display : flex;
+`;
 
 export const LoginWrapper = styled.div`
-width: 610px;
-margin: 30px 0px 0px 150px;
+margin: 70px 0px 0px 550px;
 padding: 25px;
 border: 2px solid aliceblue;
-background-color: aliceblue;
-box-shadow: 0 0 0 14px #75a1a2;
+background-color: white;
+box-shadow: 0 0 0 2px #75a1a2;
+height: 400px;
 .login-form{
     width : 400px;
     padding : 25px;

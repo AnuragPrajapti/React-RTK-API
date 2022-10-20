@@ -4,7 +4,8 @@ import {
   useGetAddUserMutation,
   useGetAllPostDataQuery,
   useGetDeleteUserMutation,
-  useGetEditUserMutation
+  useGetEditUserMutation,
+  useGetUpdateUserMutation
 } from '../../services/createSlice';
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
@@ -53,11 +54,24 @@ const Admin = ({ itemsPerPage }) => {
   const [addUser, addUserInfo] = useGetAddUserMutation();
   const [deleteUser, deleteUserInfo] = useGetDeleteUserMutation();
   const [editUser, editUserInfo] = useGetEditUserMutation();
-  const [form] = Form.useForm();
+  const [ updateUser , updateUserInfo ] = useGetUpdateUserMutation();
+  const [addUserData, setAddUserData] = useState({
+    name: '',
+    age: '',
+    city: '',
+    salary: '',
+    domain: ''
+  });
 
-  const onFinish = (value) => {
-    addUser(value)
-    form.resetFields();
+  const handleSumbitFormData = () => {
+    addUser(addUserData)
+    setAddUserData({
+      name: '',
+      age: '',
+      city: '',
+      salary: '',
+      domain: ''
+    })
   }
 
   const handleDelete = ([...id]) => {
@@ -73,9 +87,28 @@ const Admin = ({ itemsPerPage }) => {
   useEffect(() => {
     if (editUserInfo?.data?._id) {
       const editData = editUserInfo?.data;
-
+      setAddUserData({
+        'name' : editData?.name,
+        'age' : editData?.age,
+        'city' : editData?.city,
+        'salary' : editData?.salary,
+        'domain' : editData?.domain,
+        '_id' :  editData?._id
+      })
     }
+   
   }, [editUserInfo])
+
+  const hanldeUpdateUser = ()=>{
+     updateUser(addUserData)
+      setAddUserData({
+      name: '',
+      age: '',
+      city: '',
+      salary: '',
+      domain: ''
+    })
+  }
 
   return (
     <AdminWrapper>
@@ -103,11 +136,12 @@ const Admin = ({ itemsPerPage }) => {
           <thead>
             <tr>
               <th>ID</th>
+              <th>Date</th>
               <th>Name</th>
               <th>Age</th>
               <th>City</th>
               <th>Salary</th>
-              <th>Date</th>
+              <th>Domain</th>
               <th>Delete</th>
               <th>Edit User</th>
             </tr>
@@ -117,15 +151,15 @@ const Admin = ({ itemsPerPage }) => {
               data?.map((item, index) => (
                 <tr key={index}>
                   <td>{index}</td>
+                  <td>{item.date}</td>
                   <td>{item.name}</td>
                   <td>{item.age}</td>
                   <td>{item.city}</td>
                   <td>{item.salary}</td>
-                  <td>{item.date}</td>
+                  <td>{item.domain}</td>
                   <td
                     style={{ fontSize: '28px', color: 'red' }}
-                    onClick={() => { handleDelete([item._id]) }}
-                  >
+                    onClick={() => { handleDelete([item._id]) }}>
                     <AiFillDelete />
                   </td>
                   <td style={{ fontSize: '28px', color: 'red' }}
@@ -151,16 +185,12 @@ const Admin = ({ itemsPerPage }) => {
             <Form
               className='AddUserForm'
               {...formItemLayout}
-              form={form}
-              name="addUser"
-              onFinish={onFinish}
               initialValues={{
                 prefix: '+91',
               }}
               scrollToFirstError
             >
               <Form.Item
-                name="name"
                 label="Enter Name"
                 rules={[
                   {
@@ -170,10 +200,14 @@ const Admin = ({ itemsPerPage }) => {
                   },
                 ]}
               >
-                <Input placeholder='Enter Name' />
+                <Input
+                  placeholder='Enter Name'
+                  name="name"
+                  value={addUserData.name}
+                  onChange={(e) => setAddUserData({ ...addUserData, name: e.target.value })}
+                />
               </Form.Item>
               <Form.Item
-                name="age"
                 label="Enter Age"
                 rules={[
                   {
@@ -183,10 +217,15 @@ const Admin = ({ itemsPerPage }) => {
                   },
                 ]}
               >
-                <Input type='number' placeholder='Enter Age' />
+                <Input
+                  type='number'
+                  placeholder='Enter Age'
+                  name="age"
+                  value={addUserData.age}
+                  onChange={(e) => setAddUserData({ ...addUserData, age: e.target.value })}
+                />
               </Form.Item>
               <Form.Item
-                name="salary"
                 label="Enter Salary"
                 rules={[
                   {
@@ -196,11 +235,16 @@ const Admin = ({ itemsPerPage }) => {
                   },
                 ]}
               >
-                <Input type='number' placeholder='Enter Salary' />
+                <Input
+                  type='number'
+                  name="salary"
+                  placeholder='Enter Salary'
+                  value={addUserData.salary}
+                  onChange={(e) => setAddUserData({ ...addUserData, salary: e.target.value })}
+                />
               </Form.Item>
 
               <Form.Item
-                name="city"
                 label="City"
                 rules={[
                   {
@@ -209,19 +253,30 @@ const Admin = ({ itemsPerPage }) => {
                   },
                 ]}
               >
-                <Select
-                  showSearch
-                  placeholder="Select a City"
-                  optionFilterProp="children"
-                  style={{ display: "flex" }}
-                  filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
-                >
+                <Input
+                  name="city"
+                  type='text'
+                  placeholder='Enter Salary'
+                  value={addUserData.city}
+                  onChange={(e) => setAddUserData({ ...addUserData, city: e.target.value })}
+                />
+              </Form.Item>
+              <Form.Item
+                label="Domain"
+                rules={[
                   {
-                    JsonData?.map((item, index) => (
-                      <Option key={index} value={item.name}>{item.name}</Option>
-                    ))
-                  }
-                </Select>
+                    required: true,
+                    message: 'Please input City',
+                  },
+                ]}
+              >
+                <Input
+                  name="domain"
+                  type='text'
+                  placeholder='Enter Domain'
+                  value={addUserData.domain}
+                  onChange={(e) => setAddUserData({ ...addUserData, domain: e.target.value })}
+                />
               </Form.Item>
               <Form.Item
                 name="agreement"
@@ -240,9 +295,13 @@ const Admin = ({ itemsPerPage }) => {
               </Form.Item>
               <Form.Item {...tailFormItemLayout}>
                 {
-                  editUserInfo?.data?._id ? <button id="addUserbtn" className='btn btn-primary' >
+                  editUserInfo?.data?._id ?
+                   <button 
+                   id="addUserbtn" className='btn btn-primary'
+                    onClick={hanldeUpdateUser}
+                    >
                     UpdateUser
-                  </button> : <button id="addUserbtn" className='btn btn-primary' >
+                  </button> : <button id="addUserbtn" className='btn btn-primary' onClick={handleSumbitFormData} >
                     AddUser
                   </button>
                 }

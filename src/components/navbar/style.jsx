@@ -4,7 +4,7 @@ export const NavbarWrapper = styled.div`
  display: flex;
  justify-content: center;
  align-items: center;
- background-color:  rgb(122 144 137);
+ background-color: #d9d9d9;
 //  .navbarLinkActive{
 //    border-bottom: 3px solid red !important;
 //    transition: border-bottom .5s ease-in-out !important;

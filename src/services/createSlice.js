@@ -44,6 +44,7 @@ export const getAllApi = createApi({
           },
         };
       },
+      providesTags : ['all']
     }),
     getForgetPassword: build.mutation({
       query: (forgetPass) => {
@@ -59,6 +60,7 @@ export const getAllApi = createApi({
           },
         };
       },
+      invalidatesTags :['forget']
     }),
     getAddUser: build.mutation({
       query: (addUser) => ({
@@ -70,6 +72,7 @@ export const getAllApi = createApi({
           Authorization: `Bearer ${Token}`,
         },
       }),
+      invalidatesTags :['post']
     }),
     getChangePassword: build.mutation({
       query: (changePass) => ({
@@ -80,6 +83,7 @@ export const getAllApi = createApi({
           "Content-type": "application/json",
         },
       }),
+      invalidatesTags :['update']
     }),
     getDeleteUser: build.mutation({
       query: (id) => {
@@ -93,10 +97,11 @@ export const getAllApi = createApi({
           },
         };
       },
+      invalidatesTags: (result, error, arg) => [{ type: 'delete', id: arg.id }],
     }),
     getEditUser: build.mutation({
       query: (id) => {
-        console.log("DeleteSliceId",id)
+        // console.log("DeleteSliceId",id)
         return {
           url: `get/${id}`,
           method: "GET",
@@ -106,6 +111,23 @@ export const getAllApi = createApi({
           },
         };
       },
+      invalidatesTags :['get']
+    }),
+    getUpdateUser: build.mutation({
+      query: (updateUser) => {
+           const id = updateUser?._id;
+        console.log("update id",id)
+        return {
+          url: `update/${id}`,
+          method: "PUT",
+          body : updateUser,
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${Token}`,
+          },
+        };
+      },
+      invalidatesTags :['update']
     }),
   }),
 });
@@ -118,5 +140,6 @@ export const {
   useGetForgetPasswordMutation,
   useGetChangePasswordMutation,
   useGetDeleteUserMutation,
-  useGetEditUserMutation
+  useGetEditUserMutation,
+  useGetUpdateUserMutation
 } = getAllApi;
