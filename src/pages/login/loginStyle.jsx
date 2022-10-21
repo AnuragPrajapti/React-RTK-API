@@ -15,7 +15,7 @@ export const LoginWrapper = styled.div`
 margin: 70px 0px 0px 550px;
 padding: 25px;
 border: 2px solid aliceblue;
-background-color: white;
+// background-color: white;
 box-shadow: 0 0 0 2px #75a1a2;
 height: 400px;
 .login-form{
@@ -42,4 +42,5 @@ export const HeadingLogin = styled.p`
  border-bottom: 2px solid #b6d2ea;
  font-family: none;
  letter-spacing: .3em;
+ color: white;
 `;

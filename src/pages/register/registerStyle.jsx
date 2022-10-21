@@ -1,6 +1,8 @@
 import styled from 'styled-components';
+import registerImage from '../../images/registerForm/registerImage.jpg'
 
 export const Container = styled.div`
+background-image : url(${registerImage});
   height: 110vh;
   width : 100%;
   background-size:cover;
