@@ -2,7 +2,6 @@ import { RegisterWrapper, HeadingRegister, Container , ImageWrapper } from './re
 import { Button, Checkbox, Form, Input, Select, } from 'antd';
 import { useGetRegisterUserMutation } from '../../services/createSlice';
 import { NavLink } from 'react-router-dom';
-import registerImage from '../../images/registerForm/registerImage.jpg'
 import regFromImage from '../../images/registerForm/regFormImage.jpg'
 const { Option } = Select;
 const formItemLayout = {
@@ -63,7 +62,7 @@ const Register = () => {
   );
 
   return (
-    <Container style={{ backgroundImage: `url(${registerImage})` }}>
+    <Container>
       <RegisterWrapper>
         <HeadingRegister>Register Here!!</HeadingRegister>
         <Form

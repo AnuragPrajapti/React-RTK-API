@@ -75,14 +75,18 @@ export const getAllApi = createApi({
       invalidatesTags :['post']
     }),
     getChangePassword: build.mutation({
-      query: (changePass) => ({
-        url: `update`,
+      query: (changePass) =>{
+        console.log(555,changePass)
+        return({
+        url: `changePassword`,
         method: "POST",
         body: changePass,
         headers: {
           "Content-type": "application/json",
+          Authorization: `Bearer ${Token}`,
         },
-      }),
+        })
+      },
       invalidatesTags :['update']
     }),
     getDeleteUser: build.mutation({
